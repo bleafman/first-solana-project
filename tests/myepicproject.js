@@ -5,6 +5,7 @@ const { SystemProgram } = anchor.web3;
 const main = async () => {
   console.log("🚀 Starting test...");
 
+  console.log("🚀 Deploying contract...");
   const provider = anchor.Provider.env();
   anchor.setProvider(provider);
 
@@ -23,8 +24,20 @@ const main = async () => {
 
   console.log("📝 Your transaction signature:", tx);
 
+  console.log("🚀 Waiting for transaction to be mined...");
   // Fetch data from the account.
   let account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+  console.log("👀 GIF Count", account.totalGifs.toString());
+
+  // add_gif tests
+  console.log("📝 Adding GIFs...");
+  await program.rpc.addGif({
+    accounts: {
+      baseAccount: baseAccount.publicKey,
+    },
+  });
+
+  account = await program.account.baseAccount.fetch(baseAccount.publicKey);
   console.log("👀 GIF Count", account.totalGifs.toString());
 };
 
